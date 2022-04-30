@@ -1,0 +1,125 @@
+{% extends "layout.html" %} 
+
+    {% block sign %}
+        <i class="fas fa-wind"></i>
+    {% endblock %}                   
+
+    {% block body_chart %}
+        <div class="body-{{ name }}">
+            <div class="function">
+                <div class="function__item">
+                    <div class="function__title">
+                        <span class="function__name">Speaker</span>
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="function__status">
+                        OFF
+                    </div>
+                </div>
+                <div class="function__item">
+                    <div class="function__title">
+                        <span class="function__name">Door & windows</span>
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="function__status">
+                        CLOSE
+                    </div>
+                </div>
+
+                <div class="function__item">
+                    <div class="function__title">
+                        <span class="function__name">Exhaust fan</span>
+                        <i class="fas fa-fan"></i>
+                    </div>
+                    <div class="function__status">
+                        OFF
+                    </div>
+                </div>
+
+                <div class="limit">
+                    <div class="limit__change">
+                        <div class="limit__edit">Edit</div>
+                        <div class="limit__update">Update</div>
+                        <input class="limit__input">
+                    </div>
+                    <div class="limit__threshold">
+                        <span class="limit__threshold-text">Threshold limit: </span>
+                        <span class="limit__threshold-number">600</span>
+                    </div>
+
+                    <div class="wrapper">
+                        <input type="radio" name="select" id="option-1">
+                        <input type="radio" name="select" id="option-2">
+                        <label for="option-1" class="option option-1">
+                            <div class="dot"></div>
+                            <span>Manual</span>
+                            </label>
+                        <label for="option-2" class="option option-2">
+                            <div class="dot"></div>
+                            <span>Automatic</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="option">
+                <div class="data">
+                    <span class="data-text">Current gas amount: </span>
+                    <span class="data-number">{{ currentData }}</span>
+                </div>
+
+                
+            </div>
+    {% endblock %}
+
+    {% block form %}
+        <form class="form" action="/gas" method="get">
+            <select class="form-select" name="day">
+                <option disabled selected>
+                    <span style="padding: 0 10px;">Select date</span>
+                </option>
+                {% for day in days %}
+                <option>
+                    <span style="padding: 0 40px;">{{ day }}</span>
+                </option>
+                {% endfor %} 
+            </select>
+            <input class="form-input" type="submit" value="Submit">
+        </form>
+
+        <p class="curr_day">{{ curr_day }}</p>
+    {% endblock %}
+
+    {% block js %}
+        <script>
+
+            function main(xValues, yValues) {
+                let largest = yValues.reduce(function(x,y) {
+                    return (x > y) ? x : y;
+                });
+        
+                new Chart("myChart", {
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(0,0,255,1.0)",
+                        borderColor: "rgba(0,0,255,0.1)",
+                        data: yValues
+                        }]
+                    },
+                    options: {
+                        legend: {display: false},
+                        scales: {
+                        yAxes: [{ticks: {min: 100, max:700}}],
+                        }
+                    }
+                });
+            }
+        
+            document.addEventListener('DOMContentLoaded', main({{ points.time|safe }}, {{ points.value|safe }}));
+        
+        </script>
+    {% endblock %}

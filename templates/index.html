@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="./assets/css/main.css"> -->
+    <link rel="stylesheet" href="./static/css/log-reg.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>   
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-reg-panel">
+		<div class="login-info-box">
+			<h2>Already have an account ?</h2>
+			<label id="label-register" for="log-reg-show">Login</label>
+			<input type="radio" name="active-log-panel" id="log-reg-show" checked="checked">
+		</div>
+							
+		<div class="register-info-box">
+			<h2>Need an account ?</h2>
+			<label id="label-login" for="log-login-show">Register</label>
+			<input type="radio" name="active-log-panel" id="log-login-show">
+		</div>
+							
+		<div class="white-panel">
+			<form class="login-show" action="" method="POST" id="form-2">
+				<h2>LOGIN</h2>
+				<!-- <input type="text" placeholder="Email">
+				<input type="password" placeholder="Password">
+				<input type="button" value="Login"> -->
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Username</label>
+                    <input id="email" name="email" type="text" placeholder="Enter email address" class="form-control">
+                    <span class="form-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Enter password" class="form-control">
+                    <span class="form-message"></span>
+                </div>
+
+				<a href="">Forgot password?</a>
+                <button class="form-submit" method="post">Login</button>
+
+			</form>
+			<form class="register-show" action="" method="POST" id="form-1">
+				<h2>REGISTER</h2>
+                <!-- <input type="text" placeholder="Name">
+                <input type="text" placeholder="Phone">
+				<input type="text" placeholder="Email">
+				<input type="password" placeholder="Password">
+				<input type="password" placeholder="Confirm Password">
+				<input type="button" value="Register"> -->
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Username</label>
+                    <input id="email" name="email" type="text" placeholder="Email address" class="form-control">
+                    <span class="form-message"></span>
+                </div>
+
+                <!-- <div class="form-group">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input id="phone" name="phone" type="text" placeholder="Phone" class="form-control">
+                    <span class="form-message"></span>
+                </div> -->
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Enter password" class="form-control">
+                    <span class="form-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password-confirmation" class="form-label">Confirm password</label>
+                    <input id="password-confirmation" name="password-confirmation" placeholder="Enter password again" type="password" class="form-control">
+                    <span class="form-message"></span>
+                </div>
+
+                <button class="form-submit" method="post">Register</button>
+			</form>
+		</div>
+	</div>
+    <script src="./static/js/validator.js"></script>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+        $('.login-info-box').fadeOut();
+        $('.login-show').addClass('show-log-panel');
+    });
+
+    $('.login-reg-panel input[type="radio"]').on('change', function() {
+        if($('#log-login-show').is(':checked')) {
+            $('.register-info-box').fadeOut(); 
+            $('.login-info-box').fadeIn();
+            
+            $('.white-panel').addClass('right-log');
+            $('.register-show').addClass('show-log-panel');
+            $('.login-show').removeClass('show-log-panel');
+            
+        }
+        else if($('#log-reg-show').is(':checked')) {
+            $('.register-info-box').fadeIn();
+            $('.login-info-box').fadeOut();
+            
+            $('.white-panel').removeClass('right-log');
+            
+            $('.login-show').addClass('show-log-panel');
+            $('.register-show').removeClass('show-log-panel');
+        }
+    });
+</script>
+<script type="text/javascript">
+    var firebaseConfig = {
+        apiKey: "AIzaSyBU7n55eCC18LduwCTUabUAGjNwlkaAy8M",
+        authDomain: "gas-detection-4b0d4.firebaseapp.com"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const auth =  firebase.auth();
+
+    Validator({
+        form: '#form-2',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isEmail('#email'),
+            Validator.isRequired('#password'),
+            Validator.minLength('#password', 8),
+        ],
+        onSubmit: function (input) {
+            const promise = auth.signInWithEmailAndPassword(input.email,input.password);
+            promise.catch(e=>alert(e.message));
+            alert("SignIn Successfully");
+            window.location.href = "/home";
+        }
+    });
+
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isEmail('#email'),
+            Validator.isRequired('#password'),
+            Validator.minLength('#password', 8),
+            Validator.isRequired('#password-confirmation', 'Please enter this field'),
+            Validator.isConfirmed('#password-confirmation', function () {
+                return document.querySelector('#form-1 #password').value;
+            }, 'Incorrect password') 
+        ],
+        onSubmit: function (input) {
+            const promise = auth.createUserWithEmailAndPassword(input.email,input.password);
+            promise.catch(e=>alert(e.message));
+            alert("SignUp Successfully");
+        }
+    });
+
+    // firebase.auth().onAuthStateChanged((user)=>{
+     //   if(user){
+     //   var email = user.email;
+    //    alert("Active user " + email);
+
+    //    }else{
+     //   alert("No Active user Found")
+     //   }
+    //})
+</script>

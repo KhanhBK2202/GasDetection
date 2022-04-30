@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+		<link rel="stylesheet" href="static/css/main.css">
+		<link rel="stylesheet" href="static/css/base.css">
+		<!-- <link rel="stylesheet" href="static/fonts/fontawesome-free-5.15.4/css/all.min.css"> -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">    
+		<title>{{ name }} Data</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	</head>
+
+<body>
+    <header>
+        <div class="header">
+            <div class="header__title">
+                <h1 class="header__title-name">
+
+					{% block sign %}
+                    {% endblock %}
+
+                    {{ name|capitalize }}
+                    
+                </h2>
+            </div>
+        </div>
+
+        <div class="notify">    
+            <div class="notify__icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="notify__msg">
+                <span class="notify__msg-text">The amount of gas is</span>
+                <span class="notify__msg-text-warn">HIGH</span>
+            </div>
+            <div class="notify__close">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+    </header>
+
+
+	<div class="body-{{ name }}">
+
+		{% block body_chart %}{% endblock %}
+
+        <div class="graphic">
+            <canvas id="myChart" class="chart"></canvas>
+            
+            <div class="graphic__date">
+                <div class="graphic__date-select">
+                    <!-- <span class="graphic__date-select-label" onsubmit="">Select date</span> -->
+                    <!-- <i class="graphic__date-icon graphic__date-icon--down fas fa-caret-down"></i>
+                    <i class="graphic__date-icon graphic__date-icon--up fas fa-caret-up"></i> -->
+                    {% block form %}{% endblock %}
+                    <!-- <ul class="graphic__date-option">
+                        {% for day in days %}
+                        <li class="graphic__date-option-item">{{ day }}</li>
+                        {% endfor %} 
+                    </ul> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer__{{ name }}">
+            <p class="footer__text">© 2022 All Right Reserved S.H.I.E.L.D Group</p>
+        </div> 
+    </footer>
+    <script src="./static/js/main.js"></script>
+</body>
+</html>
+
+{% block js %}{% endblock %}
+
+
