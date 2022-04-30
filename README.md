@@ -1,4 +1,4 @@
-# Smart-Home---Gas-Detection-Flask-
+# Smart Home (Gas detection)
 
 How to Use:
   1. Install Python if it is not available
